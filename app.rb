@@ -74,7 +74,7 @@ class App < Sinatra::Base
       #  -d '{"checkout_token": "{checkout_token}","order_id": "{order_id}"}'
       if !response.key?('status_code')
         @item = Item.create data: { type: :charge_authorization, response: response }
-        @message = "Radical! Please confirm your purchase! (Authorize Charge)"
+        @message = "Radical! Please confirm your purchase! (Capture Charge)"
         erb :item
       else
         json response

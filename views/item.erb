@@ -22,7 +22,7 @@
 <% if @item.data['type'] == 'charge_authorization' %>
   <br>
   <br>
-  <form action="/capture/<%= @item.id %>">
-    <input class='uk-button uk-button-primary' value="Confirm (Capture)"></input>
+  <form action="/capture/<%= @item.id %>" method="post">
+    <input type="submit" class='uk-button uk-button-primary' value="Confirm (Capture)"></input>
   </form>
 <% end %>
