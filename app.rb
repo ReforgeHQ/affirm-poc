@@ -13,6 +13,10 @@ require './models/item'
 
 # The App
 class App < Sinatra::Base
+  use Rack::Auth::Basic, 'Protected Area' do |username, password|
+    username == 'reforge' && password == ENV.fetch('BASIC_AUTH_PASS')
+  end
+
   def self.boot
     url = ENV['DATABASE_URL']
     ActiveRecord::Base.establish_connection url
@@ -24,6 +28,10 @@ class App < Sinatra::Base
 
   before do
     @title = 'Affirm POC'
+  end
+
+  before do
+    redirect request.url.gsub 'http', 'https' if ENV['RACK_ENV'] != 'development'
   end
 
   get '/' do
