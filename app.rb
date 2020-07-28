@@ -21,7 +21,7 @@ class App < Sinatra::Base
   before do
     if ENV['RACK_ENV'] != 'development'
       if request.url.start_with?('http:')
-        redirect request.url.gsub 'http', 'https'
+        return redirect request.url.gsub 'http', 'https'
       end
 
       unless authorized?
