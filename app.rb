@@ -34,10 +34,6 @@ class App < Sinatra::Base
     @title = 'Affirm POC'
   end
 
-  use Rack::Auth::Basic, 'Protected Area' do |username, password|
-    username == 'reforge' && password == ENV.fetch('BASIC_AUTH_PASS')
-  end
-
   def self.boot
     url = ENV['DATABASE_URL']
     ActiveRecord::Base.establish_connection url
