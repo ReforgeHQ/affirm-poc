@@ -13,10 +13,25 @@ require './models/item'
 
 # The App
 class App < Sinatra::Base
+  def authorized?
+    @auth ||= Rack::Auth::Basic::Request.new request.env
+    @auth.provided? && @auth.basic? && @auth&.credentials == ['reforge', ENV.fetch('BASIC_AUTH_PASS')]
+  end
+
   before do
-    if ENV['RACK_ENV'] != 'development' && request.url.start_with?('http:')
-      redirect request.url.gsub 'http', 'https'
+    if ENV['RACK_ENV'] != 'development'
+      if request.url.start_with?('http:')
+        redirect request.url.gsub 'http', 'https'
+      end
+
+      unless authorized?
+        response['WWW-Authenticate'] = %(Basic realm="Restricted Area")
+        throw :halt, [401, "Login\n"]
+      end
     end
+
+    @merchant_base_url = "#{request.env['rack.url_scheme']}://#{request.host}:#{request.port}"
+    @title = 'Affirm POC'
   end
 
   use Rack::Auth::Basic, 'Protected Area' do |username, password|
@@ -30,10 +45,6 @@ class App < Sinatra::Base
 
   def self.logger
     @@logger ||= Logger.new STDOUT # rubocop:disable Style/ClassVars
-  end
-
-  before do
-    @title = 'Affirm POC'
   end
 
   get '/' do

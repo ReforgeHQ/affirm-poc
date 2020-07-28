@@ -2,8 +2,8 @@ Checkout Object:
 <textarea rows=25 class="uk-textarea">
 {
   "merchant": {
-    "user_confirmation_url": "http://localhost:9292/order_confirmation",
-    "user_cancel_url": "http://localhost:9292/cancel",
+    "user_confirmation_url": "<%= @merchant_base_url %>/order_confirmation",
+    "user_cancel_url": "<%= @merchant_base_url %>/cancel",
     "user_confirmation_url_action": "POST",
     "name": "Reforge"
   },
