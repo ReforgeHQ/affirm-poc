@@ -88,8 +88,7 @@ class App < Sinatra::Base
     require 'pry'; binding.pry
   end
 
-  #TODO: Make this a POST
-  get '/capture/:id' do
+  post '/capture/:id' do
     @item = Item.find params['id']
     response = affirm_client.post "/charges/#{@item.data['response']['id']}/capture", {}
     if !response.key?('status_code')
