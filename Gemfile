@@ -8,6 +8,7 @@ gem 'activerecord'
 gem 'pg'
 gem 'puma'
 gem 'sinatra'
+gem 'sinatra-contrib'
 
 group :development do
   gem 'rerun'
