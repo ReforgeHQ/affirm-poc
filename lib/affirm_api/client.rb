@@ -5,10 +5,6 @@ require 'net/http'
 module AffirmApi
   # Interfaces with Hacker News API
   class Client
-    # def item(id)
-    #   get "#{api_url}/item/#{id}.json"
-    # end
-
     def get(endpoint)
       App.logger.info "#{self.class}: GETing #{api_url}#{endpoint}"
 
@@ -19,7 +15,7 @@ module AffirmApi
       JSON.parse response.body
     end
 
-    def post(endpoint, body)
+    def post(endpoint, body={})
       App.logger.info "#{self.class}: POSTing #{api_url}#{endpoint}"
 
       http, request = setup_request "#{api_url}#{endpoint}", :post, body

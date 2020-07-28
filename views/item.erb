@@ -1,5 +1,28 @@
-<article class="uk-article">
-  <p>
-    <%= @story.data.to_json %>
-  </p>
-</article>
+<% if @message %>
+  <div class="uk-alert-success" uk-alert>
+    <a class="uk-alert-close" uk-close></a>
+    <p><%= @message %></p>
+  </div>
+<% end %>
+
+/ <a href="/items">items</a> / <%= @item.id %>
+<dl class="uk-description-list">
+  <dt>Data</dt>
+  <dd>
+    <pre class="uk-width-xxlarge uk-text-break uk-height-max-large" uk-overflow-auto><code><%= @item.data.to_json %></code></pre>
+  </dd>
+
+  <dt>Created</dt>
+  <dd><%= @item.created_at %> </dd>
+
+  <dt>Updated</dt>
+  <dd><%= @item.updated_at %> </dd>
+</dl>
+
+<% if @item.data['type'] == 'charge_authorization' %>
+  <br>
+  <br>
+  <form action="/capture/<%= @item.id %>">
+    <input class='uk-button uk-button-primary' value="Confirm (Capture)"></input>
+  </form>
+<% end %>

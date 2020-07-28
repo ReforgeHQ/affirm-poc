@@ -27,24 +27,57 @@ class App < Sinatra::Base
   end
 
   get '/' do
-    @items = Item.first 500
-    erb :index
+    erb :root
   end
 
-  get '/item/:id' do
+  get '/items' do
+    @items = Item.first 500
+    @title += " / items"
+    erb :items
+  end
+
+  get '/items/:id' do
     @item = Item.find params[:id]
-    @title += " - #{@item.name}"
+    @title += " / items / #{@item.id}"
     erb :item
   end
 
-  post '/confirm' do
-    checkout_token = '0VOL74HBH9CJVWH2' # TODO: REMOVE BEFORE COMMIT
-    json affirm_client.post '/charges', checkout_token: checkout_token
-    #  -d '{"checkout_token": "{checkout_token}","order_id": "{order_id}"}'
+  get '/checkout' do
+    @title += " / checkout"
+    erb :checkout
+  end
+
+  post '/order_confirmation' do
+    if params['checkout_token']
+      response = affirm_client.post '/charges', checkout_token: params['checkout_token']
+      #  -d '{"checkout_token": "{checkout_token}","order_id": "{order_id}"}'
+      if !response.key?('status_code')
+        @item = Item.create data: { type: :charge_authorization, response: response }
+        @message = "Radical! Please confirm your purchase! (Authorize Charge)"
+        erb :item
+      else
+        json response
+      end
+    else
+      require 'pry'; binding.pry
+    end
   end
 
   post '/cancel' do
     require 'pry'; binding.pry
+  end
+
+  #TODO: Make this a POST
+  get '/capture/:id' do
+    @item = Item.find params['id']
+    response = affirm_client.post "/charges/#{@item.data['response']['id']}/capture", {}
+    if !response.key?('status_code')
+      @item = Item.create data: { type: :charge_capture, response: response }
+      @message = "Thank you. All set. (Charge Captured)"
+      erb :item
+    else
+      json response
+    end
   end
 
   def affirm_client

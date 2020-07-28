@@ -1,15 +1,18 @@
 <% if @items.present? %>
-  <table class="uk-table hn-table-xsmall">
+  <table class="uk-table uk-table-striped uk-table-hover">
     <thead>
       <tr>
+        <th></th>
         <th>Data</th>
+        <th>Created</th>
+        <th>Updated</th>
       </tr>
     </thead>
     <tbody>
       <% @items.each do |item| %>
         <tr id="item_<%= item.id %>">
-          <td><%= item.id %></td>
-          <td><%= item.data.to_json %></td>
+          <td><a href="/items/<%= item.id %>">/items/<%= item.id %></a></td>
+          <td><pre class="uk-width-large uk-text-break uk-height-max-medium" uk-overflow-auto><code><%= item.data.to_json %></code></pre></td>
           <td><%= item.created_at %></td>
           <td><%= item.updated_at %></td>
         </tr>
