@@ -1,0 +1,21 @@
+<% if @items.present? %>
+  <table class="uk-table hn-table-xsmall">
+    <thead>
+      <tr>
+        <th>Data</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @items.each do |item| %>
+        <tr id="item_<%= item.id %>">
+          <td><%= item.id %></td>
+          <td><%= item.data.to_json %></td>
+          <td><%= item.created_at %></td>
+          <td><%= item.updated_at %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p class="uk-placeholder uk-text-center">No results.</p>
+<% end %>

@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+  <head>
+    <title><%= @title %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.3.3/dist/css/uikit.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.3.3/dist/js/uikit.min.js"></script>
+
+    <style>
+      <!-- Add CSS here -->
+    </style>
+  </head>
+  <body>
+    <div class="uk-container uk-container-small uk-margin-bottom">
+      <h1 class="uk-margin-top uk-text-center">
+        <a href="/">Affirm POC</a>
+      </h1>
+
+      <%= yield %>
+    </div>
+  </body>
+</html>
