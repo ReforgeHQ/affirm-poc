@@ -21,12 +21,12 @@ class App < Sinatra::Base
   before do
     if ENV['RACK_ENV'] != 'development'
       if request.url.start_with?('http:')
-        return redirect request.url.gsub 'http', 'https'
-      end
-
-      unless authorized?
-        response['WWW-Authenticate'] = %(Basic realm="Restricted Area")
-        throw :halt, [401, "Login\n"]
+        redirect request.url.gsub 'http', 'https'
+      else
+        unless authorized?
+          response['WWW-Authenticate'] = %(Basic realm="Restricted Area")
+          throw :halt, [401, "Login\n"]
+        end
       end
     end
 
