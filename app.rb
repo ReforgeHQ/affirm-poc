@@ -14,7 +14,9 @@ require './models/item'
 # The App
 class App < Sinatra::Base
   before do
-    redirect request.url.gsub 'http', 'https' if ENV['RACK_ENV'] != 'development'
+    if ENV['RACK_ENV'] != 'development' && request.url.start_with?('http:')
+      redirect request.url.gsub 'http', 'https'
+    end
   end
 
   use Rack::Auth::Basic, 'Protected Area' do |username, password|
