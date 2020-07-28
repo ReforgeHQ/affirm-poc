@@ -7,6 +7,13 @@
 
 / <a href="/items">items</a> / <%= @item.id %>
 <dl class="uk-description-list">
+  <dt>Loan ID</dt>
+  <dd>
+    <a href="<%= ENV.fetch 'AFFIRM_API_BASE_URL' %>/dashboard/#/details/<%= @item.data['loan_id'] %>">
+      <%= @item.data['loan_id'] %>
+    </a>
+  </dd>
+
   <dt>Data</dt>
   <dd>
     <pre class="uk-width-xxlarge uk-text-break uk-height-max-large" uk-overflow-auto><code><%= @item.data.to_json %></code></pre>

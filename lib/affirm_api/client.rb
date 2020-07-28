@@ -12,7 +12,7 @@ module AffirmApi
       response = http.request request
       # raise "AffirmApi::Client: Reponse Code #{response.code}" unless (200..300).include? response.code.to_i
 
-      JSON.parse response.body
+      [request, JSON.parse(response.body)]
     end
 
     def post(endpoint, body={})
@@ -22,7 +22,7 @@ module AffirmApi
       response = http.request request
       # raise "AffirmApi::Client: Reponse Code #{response.code}" unless (200..300).include? response.code.to_i
 
-      JSON.parse response.body
+      [request, JSON.parse(response.body)]
     end
 
     private

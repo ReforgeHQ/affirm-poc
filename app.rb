@@ -66,10 +66,11 @@ class App < Sinatra::Base
 
   post '/order_confirmation' do
     if params['checkout_token']
-      response = affirm_client.post '/charges', checkout_token: params['checkout_token']
+      request, response = affirm_client.post '/charges', checkout_token: params['checkout_token']
       #  -d '{"checkout_token": "{checkout_token}","order_id": "{order_id}"}'
       if !response.key?('status_code')
-        @item = Item.create data: { type: :charge_authorization, response: response }
+        request_json = { url: request.uri.to_s, body: JSON.parse(request.body) }
+        @item = Item.create data: { type: :charge_authorization, loan_id: response['id'], request: request_json, response: response }
         @message = "Radical! Please confirm your purchase! (Capture Charge)"
         erb :item
       else
@@ -86,9 +87,10 @@ class App < Sinatra::Base
 
   post '/capture/:id' do
     @item = Item.find params['id']
-    response = affirm_client.post "/charges/#{@item.data['response']['id']}/capture", {}
+    request, response = affirm_client.post "/charges/#{@item.data['response']['id']}/capture", {}
     if !response.key?('status_code')
-      @item = Item.create data: { type: :charge_capture, response: response }
+      request_json = { url: request.uri.to_s, body: JSON.parse(request.body) }
+      @item = Item.create data: { type: :charge_capture, loan_id: @item.data['response']['id'], request: request_json, response: response }
       @message = "Thank you. All set. (Charge Captured)"
       erb :item
     else
